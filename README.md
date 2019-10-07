@@ -1,1 +1,1 @@
-# docker-postgresql
+# PostgreSQL with High Availability in Docker
