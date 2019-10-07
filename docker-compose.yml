@@ -1,0 +1,36 @@
+# PostgreSQL with High Availability in Docker
+# https://hub.docker.com/_/postgres
+#
+version: '3.1'
+services:
+  db.master:
+    image: db.master
+    networks:
+    - net_postgres
+    volumes:
+    - vol_postgres:/var/lib/postgresql/data
+    env_file: ./db/pg.master.env
+    restart: always
+    build:
+      context: ./db/
+      dockerfile: pg.master.Dockerfile
+
+  db.standby:
+    image: db.standby
+    networks:
+    - net_postgres
+    volumes:
+    - vol_postgres:/var/lib/postgresql/data
+    env_file: ./db/pg.standby.env
+    restart: always
+    build:
+      context: ./db/
+      dockerfile: pg.standby.Dockerfile
+    depends_on:
+    - db.master
+
+volumes:
+  vol_postgres:
+
+networks:
+  net_postgres:

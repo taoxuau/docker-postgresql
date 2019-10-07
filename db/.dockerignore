@@ -1,0 +1,10 @@
+# docker
+Dockerfile
+*.Dockerfile
+.dockerignore
+**/*.env
+
+# git
+**/.git
+**/.gitignore
+
