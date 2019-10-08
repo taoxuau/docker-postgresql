@@ -2,7 +2,11 @@
 
 ## Quick start
 ```bash
+# Hot Standby - Write-Ahead Log Shipping with streaming replication
+# start one master server and two standby servers
 docker-compose up -d --scale db.standby=2
+# check logs
+docker-compose logs -f db.standby
 ```
 
 ## Testing
@@ -23,14 +27,14 @@ docker-compose exec -T db.master psql --host localhost --username devops --dbnam
   SELECT * FROM account;
 EOSQL
 
-# NOTE: change the parameter --index (e.g. --index=2) to check other standby servers
+# NOTE: change the parameter --index (e.g. --index=1) to check other standby servers
 # the data has been replicated to db.standby
-docker-compose exec -T --index=1 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
+docker-compose exec -T --index=2 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
   SELECT * FROM account;
 EOSQL
 
 # cannot write/delete data on db.standby
-docker-compose exec -T --index=1 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
+docker-compose exec -T --index=2 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
   DELETE FROM account;
 EOSQL
 # ERROR:  cannot execute DELETE in a read-only transaction
@@ -50,3 +54,7 @@ docker-compose version 1.24.1, build 4667896b
 $ docker images --format "{{.Repository}}:{{.Tag}}"
 docker.io/postgres:11.5-alpine
 ```
+
+## Reference
+- https://medium.com/@2hamed/replicating-postgres-inside-docker-the-how-to-3244dc2305be
+- https://www.postgresql.org/docs/11/high-availability.html
