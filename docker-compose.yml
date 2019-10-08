@@ -9,7 +9,12 @@ services:
     - net_postgres
     volumes:
     - vol_postgres:/var/lib/postgresql/data
-    env_file: ./db/pg.master.env
+    environment:
+    - POSTGRES_USER=devops
+    - POSTGRES_PASSWORD=devops
+    - POSTGRES_DB=postgres
+    - PG_MASTER_REP_USER=devops_rep
+    - PG_MASTER_REP_PASS=devops_rep
     restart: always
     build:
       context: ./db/
@@ -22,7 +27,11 @@ services:
     - net_postgres
     volumes:
     - vol_postgres:/var/lib/postgresql/data
-    env_file: ./db/pg.standby.env
+    environment:
+    - PG_MASTER_HOST=db.master
+    - PG_MASTER_PORT=5432
+    - PG_MASTER_REP_USER=devops_rep
+    - PG_MASTER_REP_PASS=devops_rep
     restart: always
     build:
       context: ./db/

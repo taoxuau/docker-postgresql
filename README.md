@@ -2,7 +2,7 @@
 
 ## Quick start
 ```bash
-docker-compose up -d
+docker-compose up -d --scale db.standby=2
 ```
 
 ## Testing
@@ -23,13 +23,14 @@ docker-compose exec -T db.master psql --host localhost --username devops --dbnam
   SELECT * FROM account;
 EOSQL
 
+# NOTE: change the parameter --index (e.g. --index=2) to check other standby servers
 # the data has been replicated to db.standby
-docker-compose exec -T db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
+docker-compose exec -T --index=1 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
   SELECT * FROM account;
 EOSQL
 
 # cannot write/delete data on db.standby
-docker-compose exec -T db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
+docker-compose exec -T --index=1 db.standby psql --host localhost --username devops --dbname postgres <<-EOSQL
   DELETE FROM account;
 EOSQL
 # ERROR:  cannot execute DELETE in a read-only transaction
