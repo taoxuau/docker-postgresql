@@ -13,7 +13,8 @@ services:
     restart: always
     build:
       context: ./db/
-      dockerfile: pg.master.Dockerfile
+      args:
+      - mode=master
 
   db.standby:
     image: db.standby
@@ -25,7 +26,8 @@ services:
     restart: always
     build:
       context: ./db/
-      dockerfile: pg.standby.Dockerfile
+      args:
+      - mode=standby
     depends_on:
     - db.master
 

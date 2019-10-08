@@ -4,7 +4,10 @@
 # official base image
 FROM postgres:11.5-alpine
 
+# Use mode={master|standby}
+ARG mode
+
 # Warning: scripts in /docker-entrypoint-initdb.d are only run if you start the container
 #          with a data directory that is empty
 # See https://docs.docker.com/samples/library/postgres/#initialization-scripts
-COPY ./pg.standby.setup.sh /docker-entrypoint-initdb.d/pg.standby.setup.sh
+COPY ./pg.$mode.setup.sh /docker-entrypoint-initdb.d/pg.$mode.setup.sh
