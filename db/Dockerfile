@@ -11,3 +11,7 @@ ARG mode
 #          with a data directory that is empty
 # See https://docs.docker.com/samples/library/postgres/#initialization-scripts
 COPY ./pg.$mode.setup.sh /docker-entrypoint-initdb.d/pg.$mode.setup.sh
+
+# Set PGDATA immediate after shebang
+RUN set -ex \
+  && sed -i "2s/^/PGDATA=\/var\/lib\/postgresql\/data\/$mode\/"'$HOSTNAME'"\n\n/" /usr/local/bin/docker-entrypoint.sh
