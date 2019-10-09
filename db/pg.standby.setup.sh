@@ -26,14 +26,11 @@ while ! pg_basebackup -h ${PG_MASTER_HOST} -D ${PGDATA} -U ${PG_MASTER_REP_USER}
   sleep 0.1
 done
 
-# postgresql.conf
-sed -i 's/wal_level = hot_standby/wal_level = replica/g' ${PGDATA}/postgresql.conf
-
 # recovery.conf
 cat >${PGDATA}/recovery.conf <<EOF
 standby_mode = 'on'
 primary_conninfo = 'host=$PG_MASTER_HOST port=$PG_MASTER_PORT user=$PG_MASTER_REP_USER password=$PG_MASTER_REP_PASS'
-recovery_target_timeline='latest'
+recovery_target_timeline = 'latest'
 trigger_file = '/tmp/touch_me_to_promote_me_to_postgres_master'
 EOF
 
