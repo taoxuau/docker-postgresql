@@ -56,5 +56,6 @@ docker.io/postgres:11.5-alpine
 ```
 
 ## Reference
-- https://medium.com/@2hamed/replicating-postgres-inside-docker-the-how-to-3244dc2305be
 - https://www.postgresql.org/docs/11/high-availability.html
+- https://scalegrid.io/blog/getting-started-with-postgresql-streaming-replication/
+- https://medium.com/@2hamed/replicating-postgres-inside-docker-the-how-to-3244dc2305be
